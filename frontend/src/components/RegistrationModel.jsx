@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
 
-export default function RegistrationModal({ isOpen, onClose }) {
+export default function RegistrationModel({ isOpen, onClose, onSubmit }) {
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     teamName: '',
-    members: ['', '', '', ''],
+    teamLeader: '',
+    members: ['', '', ''],   // 3 extra members (index 0-2)
     emails: ['', '', '', ''],
     phones: ['', '', '', ''],
   });
@@ -20,17 +21,13 @@ export default function RegistrationModal({ isOpen, onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.members.some((m) => m === '')) {
-      alert('All 4 members are required');
-      return;
-    }
 
     const payload = {
       teamName: formData.teamName,
-      member1: formData.members[0], email1: formData.emails[0], phone1: formData.phones[0],
-      member2: formData.members[1], email2: formData.emails[1], phone2: formData.phones[1],
-      member3: formData.members[2], email3: formData.emails[2], phone3: formData.phones[2],
-      member4: formData.members[3], email4: formData.emails[3], phone4: formData.phones[3],
+      member1: formData.teamLeader,   email1: formData.emails[0], phone1: formData.phones[0],
+      member2: formData.members[0],   email2: formData.emails[1], phone2: formData.phones[1],
+      member3: formData.members[1],   email3: formData.emails[2], phone3: formData.phones[2],
+      member4: formData.members[2],   email4: formData.emails[3], phone4: formData.phones[3],
     };
 
     try {
@@ -38,7 +35,17 @@ export default function RegistrationModal({ isOpen, onClose }) {
         'https://script.google.com/macros/s/AKfycbyJLeP7Q3Lh70nxm38esfgzKeyCotMmZzvu9CDglyurtl5Vhrt4MZpSK8-S3hx17010/exec',
         { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }
       );
+
       setSubmitted(true);
+
+      // Call parent handler so App.jsx can update state
+      if (onSubmit) {
+        onSubmit({
+          teamName: formData.teamName,
+          teamLeader: formData.teamLeader,
+          members: formData.members,
+        });
+      }
     } catch (err) {
       console.error('Submission error:', err);
       alert('Submission failed. Please try again.');
@@ -75,21 +82,49 @@ export default function RegistrationModal({ isOpen, onClose }) {
             />
           </div>
 
-          {/* Members */}
+          {/* Team Leader */}
+          <div className="border border-gray-200 rounded-lg p-4 space-y-3">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Team Leader</p>
+            <input
+              type="text"
+              required
+              value={formData.teamLeader}
+              onChange={(e) => setFormData({ ...formData, teamLeader: e.target.value })}
+              placeholder="Full name"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#003d82] focus:border-transparent outline-none transition-all"
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <input
+                type="email"
+                value={formData.emails[0]}
+                onChange={(e) => handleChange(0, 'emails', e.target.value)}
+                placeholder="Email address"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#003d82] focus:border-transparent outline-none transition-all"
+              />
+              <input
+                type="tel"
+                value={formData.phones[0]}
+                onChange={(e) => handleChange(0, 'phones', e.target.value)}
+                placeholder="Phone number"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#003d82] focus:border-transparent outline-none transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Extra Members */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-3">
-              Team Members <span className="text-red-500">*</span>
-              <span className="text-gray-400 font-normal ml-1">(4 required)</span>
+              Team Members
+              <span className="text-gray-400 font-normal ml-1">(up to 3 additional)</span>
             </label>
             <div className="space-y-4">
               {formData.members.map((_, i) => (
                 <div key={i} className="border border-gray-200 rounded-lg p-4 space-y-3">
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                    {i === 0 ? 'Team Leader' : `Member ${i + 1}`}
+                    Member {i + 2}
                   </p>
                   <input
                     type="text"
-                    required
                     value={formData.members[i]}
                     onChange={(e) => handleChange(i, 'members', e.target.value)}
                     placeholder="Full name"
@@ -98,15 +133,15 @@ export default function RegistrationModal({ isOpen, onClose }) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <input
                       type="email"
-                      value={formData.emails[i]}
-                      onChange={(e) => handleChange(i, 'emails', e.target.value)}
+                      value={formData.emails[i + 1]}
+                      onChange={(e) => handleChange(i + 1, 'emails', e.target.value)}
                       placeholder="Email address"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#003d82] focus:border-transparent outline-none transition-all"
                     />
                     <input
                       type="tel"
-                      value={formData.phones[i]}
-                      onChange={(e) => handleChange(i, 'phones', e.target.value)}
+                      value={formData.phones[i + 1]}
+                      onChange={(e) => handleChange(i + 1, 'phones', e.target.value)}
                       placeholder="Phone number"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#003d82] focus:border-transparent outline-none transition-all"
                     />
