@@ -32,7 +32,7 @@ export default function RegistrationModel({ isOpen, onClose, onSubmit }) {
 
     try {
       await fetch(
-        'https://script.google.com/macros/s/AKfycbyJLeP7Q3Lh70nxm38esfgzKeyCotMmZzvu9CDglyurtl5Vhrt4MZpSK8-S3hx17010/exec',
+        'https://script.google.com/macros/s/AKfycbxiw3aVaGeGXTi6UXbQHg0DfK-ZoBeImx4O2s9ehNVPWRjneC4aoP9sNfNNAynSO-2W/exec',
         { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }
       );
 

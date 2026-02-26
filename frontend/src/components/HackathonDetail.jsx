@@ -1,49 +1,74 @@
 import { useState, useEffect, useRef } from 'react';
 import { Calendar, MapPin, Users, Trophy, Clock, TrendingUp } from 'lucide-react';
 
-/* Animated counter hook */
-function useCountUp(target, duration = 1200) {
+// ── Paste your Apps Script Web App URL here ───────────────────────────────────
+const SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbxiw3aVaGeGXTi6UXbQHg0DfK-ZoBeImx4O2s9ehNVPWRjneC4aoP9sNfNNAynSO-2W/exec';
+// ─────────────────────────────────────────────────────────────────────────────
+
+/* Animated count-up hook */
+function useCountUp(target, duration = 1000) {
   const [count, setCount] = useState(0);
   const prev = useRef(0);
-
   useEffect(() => {
     const start = prev.current;
-    const diff = target - start;
+    const diff  = target - start;
     if (diff === 0) return;
-
-    const startTime = performance.now();
+    const t0   = performance.now();
     const step = (now) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // ease-out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(start + diff * eased));
-      if (progress < 1) requestAnimationFrame(step);
+      const p = Math.min((now - t0) / duration, 1);
+      const e = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      setCount(Math.round(start + diff * e));
+      if (p < 1) requestAnimationFrame(step);
       else prev.current = target;
     };
     requestAnimationFrame(step);
   }, [target, duration]);
-
   return count;
 }
 
 export default function HackathonDetail({
   onRegisterClick,
   isRegistered,
-  registeredTeams = [],
+  registeredTeams,
 }) {
   const [activeTab, setActiveTab] = useState('overview');
 
-  const totalTeams = registeredTeams.length;
-  const totalParticipants = registeredTeams.reduce((sum, t) => sum + (t.memberCount ?? 4), 0);
+  // ── Live counts from Google Sheets ─────────────────────────────────────────
+  const [liveTeams,        setLiveTeams]        = useState(0);
+  const [liveParticipants, setLiveParticipants] = useState(0);
 
-  const animatedTeams = useCountUp(totalTeams);
-  const animatedParticipants = useCountUp(totalParticipants);
+  const fetchCounts = () => {
+    fetch(`${SCRIPT_URL}?t=${Date.now()}`) // cache-bust
+      .then((r) => r.json())
+      .then((data) => {
+        if (typeof data.teams        === 'number') setLiveTeams(data.teams);
+        if (typeof data.participants === 'number') setLiveParticipants(data.participants);
+      })
+      .catch(() => {/* network error — keep last value */});
+  };
+
+  useEffect(() => {
+    fetchCounts();                          // fetch immediately on mount
+    const id = setInterval(fetchCounts, 30_000); // then every 30 s
+    return () => clearInterval(id);
+  }, []);
+
+  // Re-fetch instantly when this user just registered (isRegistered flips true)
+  const prevRegistered = useRef(false);
+  useEffect(() => {
+    if (isRegistered && !prevRegistered.current) fetchCounts();
+    prevRegistered.current = isRegistered;
+  }, [isRegistered]);
+  // ───────────────────────────────────────────────────────────────────────────
+
+  const animatedTeams        = useCountUp(liveTeams);
+  const animatedParticipants = useCountUp(liveParticipants);
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
-    { id: 'problem', label: 'Problem Statement' },
-    { id: 'rules', label: 'Rules' },
+    { id: 'problem',  label: 'Problem Statement' },
+    { id: 'rules',    label: 'Rules' },
     { id: 'timeline', label: 'Timeline' },
   ];
 
@@ -64,29 +89,27 @@ export default function HackathonDetail({
 
           {/* Info Grid */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <InfoItem icon={<Calendar />} label="Date" value="March 14, 2026" />
-            <InfoItem icon={<MapPin />} label="Location" value="Virtual & On-Campus" />
-            <InfoItem icon={<Users />} label="Team Size" value="2-4 members" />
-            <InfoItem icon={<Trophy />} label="Prize Pool" value="₹15,000" />
+            <InfoItem icon={<Calendar />} label="Date"     value="March 14, 2026" />
+            <InfoItem icon={<MapPin />}   label="Location" value="Virtual & On-Campus" />
+            <InfoItem icon={<Users />}    label="Team Size" value="2-4 members" />
+            <InfoItem icon={<Trophy />}   label="Prize Pool" value="₹15,000" />
           </div>
 
-          {/* ── Live Stats Cards ── */}
-          {totalTeams > 0 && (
-            <div className="grid grid-cols-2 gap-4 mb-8">
-              <StatCard
-                icon={<Users className="w-6 h-6" />}
-                value={animatedTeams}
-                label="Teams Registered"
-                color="from-[#003d82] to-[#0066cc]"
-              />
-              <StatCard
-                icon={<TrendingUp className="w-6 h-6" />}
-                value={animatedParticipants}
-                label="Total Participants"
-                color="from-[#0052a8] to-[#0080ff]"
-              />
-            </div>
-          )}
+          {/* ── Live counters — always visible to ALL users ── */}
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            <StatCard
+              icon={<Users className="w-6 h-6" />}
+              value={animatedTeams}
+              label="Teams Registered"
+              color="from-[#003d82] to-[#0066cc]"
+            />
+            <StatCard
+              icon={<TrendingUp className="w-6 h-6" />}
+              value={animatedParticipants}
+              label="Total Participants"
+              color="from-[#0052a8] to-[#0080ff]"
+            />
+          </div>
 
           {/* Tabs */}
           <div className="border-b mb-8">
@@ -110,8 +133,8 @@ export default function HackathonDetail({
           {/* Tab Content */}
           <div className="prose max-w-none">
             {activeTab === 'overview' && <Overview />}
-            {activeTab === 'problem' && <Problem />}
-            {activeTab === 'rules' && <Rules />}
+            {activeTab === 'problem'  && <Problem />}
+            {activeTab === 'rules'    && <Rules />}
             {activeTab === 'timeline' && <Timeline />}
           </div>
         </div>
@@ -132,7 +155,7 @@ export default function HackathonDetail({
           </div>
         )}
 
-        {/* Registered Teams Table */}
+        {/* Registered Teams — only shown to users who registered on this device */}
         {isRegistered && registeredTeams.length > 0 && (
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
             <h3 className="text-2xl font-bold text-gray-900 mb-6">Registered Teams</h3>
@@ -140,7 +163,6 @@ export default function HackathonDetail({
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="py-3 px-4 text-left font-semibold">#</th>
                     <th className="py-3 px-4 text-left font-semibold">Team Name</th>
                     <th className="py-3 px-4 text-left font-semibold">Team Leader</th>
                     <th className="py-3 px-4 text-left font-semibold">Members</th>
@@ -149,10 +171,9 @@ export default function HackathonDetail({
                 <tbody>
                   {registeredTeams.map((team, index) => (
                     <tr key={index} className="border-b hover:bg-gray-50">
-                      <td className="py-3 px-4 text-gray-400">{index + 1}</td>
-                      <td className="py-3 px-4 font-medium">{team.teamName}</td>
+                      <td className="py-3 px-4">{team.teamName}</td>
                       <td className="py-3 px-4">{team.leader}</td>
-                      <td className="py-3 px-4">{team.memberCount ?? 4}</td>
+                      <td className="py-3 px-4">{team.members}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -215,9 +236,11 @@ function Problem() {
       <div className="bg-blue-50 border-l-4 border-[#003d82] p-6">
         <div className="flex items-center space-x-2 mb-2">
           <Clock className="w-5 h-5 text-[#003d82]" />
-          <p className="font-semibold">Will be released on March 15, 2024 at 9:00 AM</p>
+          <p className="font-semibold">Will be released on March 1, 2026 at 9:00 AM</p>
         </div>
-        <p className="text-gray-600">Problem statement will be revealed at the start of the hackathon.</p>
+        <p className="text-gray-600">
+          Problem statement will be revealed at the start of the hackathon.
+        </p>
       </div>
     </>
   );
