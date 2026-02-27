@@ -81,7 +81,7 @@ export default function HackathonDetail({ onRegisterClick, isRegistered }) {
             <InfoItem icon={<Calendar />} label="Date"      value="March 14, 2026" />
             <InfoItem icon={<MapPin />}   label="Location"  value="Virtual & On-Campus" />
             <InfoItem icon={<Users />}    label="Team Size" value="3–5 members" />
-            <InfoItem icon={<Trophy />}   label="Prize Pool" value="₹10,000+" />
+            <InfoItem icon={<Trophy />}   label="Prize Pool" value="₹10,000" />
           </div>
 
           {/* Live Counters — stack vertically on very small, side by side on sm+ */}
