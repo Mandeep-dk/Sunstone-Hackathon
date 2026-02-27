@@ -8,7 +8,6 @@ import RegistrationModel from './components/RegistrationModel';
 import AboutPage from './components/AboutPage';
 import Footer from './components/Footer';
 
-// ── helpers ──────────────────────────────────────────────────────────────────
 function load(key, fallback) {
   try {
     const raw = localStorage.getItem(key);
@@ -21,25 +20,19 @@ function load(key, fallback) {
 function save(key, value) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
-  } catch {
-    // storage full / private mode — fail silently
-  }
+  } catch {}
 }
-// ─────────────────────────────────────────────────────────────────────────────
 
 function App() {
-  // Every piece of state is seeded from localStorage on first render
-  const [currentPage, setCurrentPage]         = useState(() => load('hs_page', 'home'));
-  const [isModalOpen, setIsModalOpen]         = useState(false);
-  const [isRegistered, setIsRegistered]       = useState(() => load('hs_registered', false));
+  const [currentPage, setCurrentPage]               = useState('home');
+  const [isModalOpen, setIsModalOpen]               = useState(false);
+  const [isRegistered, setIsRegistered]             = useState(() => load('hs_registered', false));
   const [registeredTeamName, setRegisteredTeamName] = useState(() => load('hs_teamName', ''));
-  const [registeredTeams, setRegisteredTeams] = useState(() => load('hs_teams', []));
+  const [registeredTeams, setRegisteredTeams]       = useState(() => load('hs_teams', []));
 
-  // Persist whenever state changes
-  useEffect(() => { save('hs_page', currentPage); },         [currentPage]);
-  useEffect(() => { save('hs_registered', isRegistered); },  [isRegistered]);
+  useEffect(() => { save('hs_registered', isRegistered); },     [isRegistered]);
   useEffect(() => { save('hs_teamName', registeredTeamName); }, [registeredTeamName]);
-  useEffect(() => { save('hs_teams', registeredTeams); },    [registeredTeams]);
+  useEffect(() => { save('hs_teams', registeredTeams); },       [registeredTeams]);
 
   const handleNavigate = (page) => {
     setCurrentPage(page);
@@ -79,18 +72,18 @@ function App() {
         onRegisterClick={handleRegisterClick}
       />
 
-     {currentPage === 'home' && (
-  <>
-    <HomePage
-      onRegisterClick={handleRegisterClick}
-      onNavigate={handleNavigate}
-    />
-    <EventsSection
-      onEventClick={handleEventClick}
-      onRegisterClick={handleRegisterClick}
-    />
-  </>
-)}
+      {currentPage === 'home' && (
+        <>
+          <HomePage
+            onRegisterClick={handleRegisterClick}
+            onNavigate={handleNavigate}
+          />
+          <EventsSection
+            onEventClick={handleEventClick}
+            onRegisterClick={handleRegisterClick}
+          />
+        </>
+      )}
 
       {currentPage === 'events' && (
         <div className="pt-16">
