@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const carouselSlides = [
   {
     id: 1,
-    title: 'Sunstone Hackathon 2024',
+    title: 'HackStone 2026',
     tagline: 'Innovate. Code. Transform the Future.',
     gradient: 'from-[#003d82] to-[#0052a8]',
   },
@@ -35,8 +35,8 @@ const PARTICLES = Array.from({ length: 22 }, (_, i) => ({
 
 const CODE_TAGS = ['</>','{}','01','&&','=>','[ ]','def','git','npm','API','AI','ML'];
 
-export default function Hero({ onRegisterClick }) {
-  const [currentSlide, setCurrentSlide] = useState(0);
+export default function Hero({ onRegisterClick, onNavigate }) {
+    const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -176,11 +176,11 @@ export default function Hero({ onRegisterClick }) {
                 {slide.tagline}
               </p>
               <button
-                onClick={onRegisterClick}
-                className="bg-white text-[#003d82] px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg hover:shadow-2xl"
-              >
-                Register Now
-              </button>
+  onClick={() => onNavigate('hackathon-detail')}
+  className="bg-white text-[#003d82] px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg hover:shadow-2xl"
+>
+  Register Now
+</button>
             </div>
           </div>
         ))}

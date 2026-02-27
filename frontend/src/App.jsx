@@ -79,15 +79,18 @@ function App() {
         onRegisterClick={handleRegisterClick}
       />
 
-      {currentPage === 'home' && (
-        <>
-          <HomePage onRegisterClick={handleRegisterClick} />
-          <EventsSection
-            onEventClick={handleEventClick}
-            onRegisterClick={handleRegisterClick}
-          />
-        </>
-      )}
+     {currentPage === 'home' && (
+  <>
+    <HomePage
+      onRegisterClick={handleRegisterClick}
+      onNavigate={handleNavigate}
+    />
+    <EventsSection
+      onEventClick={handleEventClick}
+      onRegisterClick={handleRegisterClick}
+    />
+  </>
+)}
 
       {currentPage === 'events' && (
         <div className="pt-16">
