@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Calendar, MapPin, Users, Trophy, Clock, TrendingUp } from 'lucide-react';
 
 // ── Paste your Apps Script Web App URL here ───────────────────────────────────
-const SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbyJLeP7Q3Lh70nxm38esfgzKeyCotMmZzvu9CDglyurtl5Vhrt4MZpSK8-S3hx17010/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxiw3aVaGeGXTi6UXbQHg0DfK-ZoBeImx4O2s9ehNVPWRjneC4aoP9sNfNNAynSO-2W/exec';
 // ─────────────────────────────────────────────────────────────────────────────
 
 /* Animated count-up hook */

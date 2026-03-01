@@ -22,7 +22,6 @@ const carouselSlides = [
   },
 ];
 
-// Floating particle data — fixed so it doesn't regenerate on re-render
 const PARTICLES = Array.from({ length: 22 }, (_, i) => ({
   id: i,
   size: 4 + Math.random() * 4,
@@ -35,7 +34,7 @@ const PARTICLES = Array.from({ length: 22 }, (_, i) => ({
 
 const CODE_TAGS = ['</>','{}','01','&&','=>','[ ]','def','git','npm','API','AI','ML'];
 
-export default function Hero({ onRegisterClick }) {
+export default function Hero({ onRegisterClick, onNavigate }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -50,7 +49,6 @@ export default function Hero({ onRegisterClick }) {
 
   return (
     <>
-      {/* Keyframe styles injected once */}
       <style>{`
         @keyframes float-up {
           0%   { transform: translateY(0px) translateX(0px); opacity: 0; }
@@ -79,8 +77,8 @@ export default function Hero({ onRegisterClick }) {
         }
       `}</style>
 
-      <div className="relative h-[600px] overflow-hidden">
-        {/* ── Slide backgrounds ── */}
+      <div className="relative h-[480px] sm:h-[600px] overflow-hidden">
+        {/* Slide backgrounds */}
         {carouselSlides.map((slide, index) => (
           <div
             key={slide.id}
@@ -90,30 +88,26 @@ export default function Hero({ onRegisterClick }) {
           />
         ))}
 
-        {/* ── Dot-grid overlay ── */}
+        {/* Dot-grid overlay */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage:
-              'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
             backgroundSize: '36px 36px',
           }}
         />
 
-        {/* ── Glowing orbs ── */}
+        {/* Glowing orbs */}
         {[
           { w: 320, h: 320, top: '-80px', left: '-80px', delay: '0s' },
-          { w: 260, h: 260, top: '60%',  left: '70%',   delay: '2s' },
-          { w: 180, h: 180, top: '20%',  left: '50%',   delay: '4s' },
+          { w: 260, h: 260, top: '60%',   left: '70%',   delay: '2s' },
+          { w: 180, h: 180, top: '20%',   left: '50%',   delay: '4s' },
         ].map((orb, i) => (
           <div
             key={i}
             className="absolute rounded-full pointer-events-none"
             style={{
-              width: orb.w,
-              height: orb.h,
-              top: orb.top,
-              left: orb.left,
+              width: orb.w, height: orb.h, top: orb.top, left: orb.left,
               background: 'radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%)',
               animation: `pulse-glow 6s ease-in-out infinite, drift 14s ease-in-out infinite`,
               animationDelay: orb.delay,
@@ -121,27 +115,25 @@ export default function Hero({ onRegisterClick }) {
           />
         ))}
 
-        {/* ── Floating particles ── */}
+        {/* Floating particles */}
         {PARTICLES.map((p) => (
           <div
             key={p.id}
             className="absolute rounded-full bg-white pointer-events-none"
             style={{
-              width: p.size,
-              height: p.size,
-              left: `${p.x}%`,
-              top: `${p.y}%`,
+              width: p.size, height: p.size,
+              left: `${p.x}%`, top: `${p.y}%`,
               opacity: p.opacity,
               animation: `float-up ${p.duration}s ease-in-out ${p.delay}s infinite`,
             }}
           />
         ))}
 
-        {/* ── Floating code tags ── */}
+        {/* Floating code tags — hidden on mobile to reduce clutter */}
         {CODE_TAGS.map((tag, i) => (
           <div
             key={tag}
-            className="absolute font-mono text-xs font-bold text-white pointer-events-none select-none"
+            className="hidden sm:block absolute font-mono text-xs font-bold text-white pointer-events-none select-none"
             style={{
               left: `${5 + (i * 8.5) % 90}%`,
               top: `${20 + (i * 13) % 65}%`,
@@ -153,7 +145,7 @@ export default function Hero({ onRegisterClick }) {
           </div>
         ))}
 
-        {/* ── Slide content ── */}
+        {/* Slide content */}
         {carouselSlides.map((slide, index) => (
           <div
             key={slide.id}
@@ -162,22 +154,18 @@ export default function Hero({ onRegisterClick }) {
             }`}
           >
             <div
-              className="text-center text-white px-4 max-w-4xl relative z-10"
-              style={
-                index === currentSlide
-                  ? { animation: 'slide-fade-in 0.6s ease-out both' }
-                  : {}
-              }
+              className="text-center text-white px-8 sm:px-12 max-w-4xl relative z-10"
+              style={index === currentSlide ? { animation: 'slide-fade-in 0.6s ease-out both' } : {}}
             >
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 drop-shadow-lg">
+              <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-3 sm:mb-6 drop-shadow-lg leading-tight">
                 {slide.title}
               </h1>
-              <p className="text-xl md:text-2xl mb-8 text-gray-100 drop-shadow">
+              <p className="text-sm sm:text-xl md:text-2xl mb-6 sm:mb-8 text-gray-100 drop-shadow leading-snug">
                 {slide.tagline}
               </p>
               <button
-                onClick={onRegisterClick}
-                className="bg-white text-[#003d82] px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg hover:shadow-2xl"
+                onClick={() => onNavigate('hackathon-detail')}
+                className="bg-white text-[#003d82] px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg hover:shadow-2xl"
               >
                 Register Now
               </button>
@@ -185,22 +173,22 @@ export default function Hero({ onRegisterClick }) {
           </div>
         ))}
 
-        {/* ── Navigation ── */}
+        {/* Navigation arrows — hidden on mobile, visible on sm+ */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/35 text-white p-2 rounded-full backdrop-blur-sm transition-all hover:scale-110 z-20"
+          className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/35 text-white p-2 rounded-full backdrop-blur-sm transition-all hover:scale-110 z-20"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/35 text-white p-2 rounded-full backdrop-blur-sm transition-all hover:scale-110 z-20"
+          className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/35 text-white p-2 rounded-full backdrop-blur-sm transition-all hover:scale-110 z-20"
         >
           <ChevronRight className="w-6 h-6" />
         </button>
 
-        {/* ── Indicators ── */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
+        {/* Dot indicators — always visible, slightly higher on mobile */}
+        <div className="absolute bottom-5 sm:bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
           {carouselSlides.map((_, index) => (
             <button
               key={index}
