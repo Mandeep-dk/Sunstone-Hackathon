@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Calendar, MapPin, Users, Trophy, Clock, TrendingUp } from 'lucide-react';
 
 // ── Paste your Apps Script Web App URL here ───────────────────────────────────
-const SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbyJLeP7Q3Lh70nxm38esfgzKeyCotMmZzvu9CDglyurtl5Vhrt4MZpSK8-S3hx17010/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxiw3aVaGeGXTi6UXbQHg0DfK-ZoBeImx4O2s9ehNVPWRjneC4aoP9sNfNNAynSO-2W/exec';
 // ─────────────────────────────────────────────────────────────────────────────
 
 /* Animated count-up hook */
@@ -96,15 +95,15 @@ export default function HackathonDetail({
           </div>
 
           {/* ── Live counters — always visible to ALL users ── */}
-          <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6 sm:mb-8">
             <StatCard
-              icon={<Users className="w-6 h-6" />}
+              icon={<Users className="w-5 h-5 sm:w-6 sm:h-6" />}
               value={animatedTeams}
               label="Teams Registered"
               color="from-[#003d82] to-[#0066cc]"
             />
             <StatCard
-              icon={<TrendingUp className="w-6 h-6" />}
+              icon={<TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />}
               value={animatedParticipants}
               label="Total Participants"
               color="from-[#0052a8] to-[#0080ff]"
@@ -366,7 +365,7 @@ function Rules() {
     <>
       <h3 className="text-2xl font-bold mb-4">Rules & Guidelines</h3>
       <ul className="list-disc list-inside text-gray-600 space-y-2">
-        <li>Teams of 3–5 members</li>
+        <li>Teams of 4–5 members</li>
         <li>All participants must be students from Sunstone</li>
         <li>Only original ideas and work are allowed</li>
         <li>Teams that submit their idea in the online round will receive participation certificates</li>
