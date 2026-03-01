@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const carouselSlides = [
   {
     id: 1,
-    title: 'Sunstone Hackathon 2024',
+    title: 'HackStone 2026',
     tagline: 'Innovate. Code. Transform the Future.',
     gradient: 'from-[#003d82] to-[#0052a8]',
   },

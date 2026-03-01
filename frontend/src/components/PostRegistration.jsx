@@ -3,7 +3,7 @@ import { CheckCircle, Clock } from 'lucide-react';
 
 // ── Fixed target: March 15, 2026 at 9:00 AM IST (UTC+5:30) ──────────────────
 // Change this date to match your actual problem-statement release time.
-const TARGET_DATE = new Date('2026-03-01T09:00:00+05:30');
+const TARGET_DATE = new Date('2026-03-01T18:30:00+05:30');
 
 function getTimeLeft() {
   const diff = TARGET_DATE - Date.now();
@@ -60,7 +60,7 @@ export default function PostRegistration({ teamName }) {
                   Problem Statement Release Countdown
                 </p>
               </div>
-              <p className="text-sm text-gray-600">March 1, 2026 at 9:00 AM</p>
+              <p className="text-sm text-gray-600">March 1, 2026 at 6:30 PM</p>
             </div>
 
             <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
@@ -104,8 +104,7 @@ export default function PostRegistration({ teamName }) {
           <h3 className="font-semibold text-gray-900 mb-2">Important Reminder</h3>
           <p className="text-gray-700">
             Make sure all team members are available during the hackathon dates
-            (March 15–17, 2026). The problem statement will be revealed at the
-            opening ceremony.
+            (March 14, 2026).
           </p>
         </div>
       </div>
