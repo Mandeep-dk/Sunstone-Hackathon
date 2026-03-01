@@ -183,7 +183,7 @@ function InfoItem({ icon, label, value }) {
 function Overview() {
   const highlights = [
     { icon: '🎓', title: 'College Students Only', desc: 'Open to all undergraduate & postgraduate students with a valid college ID.' },
-    { icon: '🔀', title: 'Hybrid Format', desc: 'Build your solution online over 11 days, then present live on campus in the Grand Finale.' },
+    { icon: '🔀', title: 'Hybrid Format', desc: 'Build your solution online over 7 days, then present live on campus in the Grand Finale.' },
     { icon: '🧑‍🏫', title: 'Mentorship', desc: 'Get guidance from experienced faculty and industry professionals throughout the hacking period.' },
     { icon: '📜', title: 'Certificates for All', desc: 'Every participating team receives an official certificate of participation.' },
   ];
@@ -315,7 +315,7 @@ function Overview() {
 
       {/* ── Prize Pool ── */}
       <h4 className="text-lg font-bold text-gray-800 mb-1">🏆 Prize Pool — ₹7,000</h4>
-      <p className="text-xs text-gray-400 mb-4">Prizes awarded per track · Winners announced on March 14</p>
+      <p className="text-xs text-gray-400 mb-4">Winners announced on March 14</p>
       <div className="flex flex-col sm:flex-row gap-4 mb-4">
         {prizes.map((p, i) => (
           <div
@@ -595,7 +595,7 @@ function Timeline() {
       desc: 'Build your solution, iterate fast, and get mentorship. Online collaboration allowed. Use any tech stack.',
       icon: '💻',
       color: '#0052a8',
-      badge: '11 Days',
+      badge: '7 Days',
     },
     {
       date: 'Mar 7, 2026',
