@@ -5,6 +5,7 @@ import { Calendar, MapPin, Users, Trophy, Clock, TrendingUp } from 'lucide-react
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxiw3aVaGeGXTi6UXbQHg0DfK-ZoBeImx4O2s9ehNVPWRjneC4aoP9sNfNNAynSO-2W/exec';
 // ─────────────────────────────────────────────────────────────────────────────
 
+/* Animated count-up hook */
 function useCountUp(target, duration = 1000) {
   const [count, setCount] = useState(0);
   const prev = useRef(0);
@@ -15,7 +16,7 @@ function useCountUp(target, duration = 1000) {
     const t0 = performance.now();
     const step = (now) => {
       const p = Math.min((now - t0) / duration, 1);
-      const e = 1 - Math.pow(1 - p, 3);
+      const e = 1 - Math.pow(1 - p, 3); // ease-out cubic
       setCount(Math.round(start + diff * e));
       if (p < 1) requestAnimationFrame(step);
       else prev.current = target;
@@ -25,7 +26,11 @@ function useCountUp(target, duration = 1000) {
   return count;
 }
 
-export default function HackathonDetail({ onRegisterClick, isRegistered }) {
+export default function HackathonDetail({
+  onRegisterClick,
+  isRegistered,
+  registeredTeams,
+}) {
   const [activeTab, setActiveTab] = useState('overview');
 
   // ── Live counts from Google Sheets ─────────────────────────────────────────
@@ -33,7 +38,7 @@ export default function HackathonDetail({ onRegisterClick, isRegistered }) {
   const [liveParticipants, setLiveParticipants] = useState(0);
 
   const fetchCounts = () => {
-    fetch(`${SCRIPT_URL}?t=${Date.now()}`)
+    fetch(`${SCRIPT_URL}?t=${Date.now()}`) // cache-bust
       .then((r) => r.json())
       .then((data) => {
         if (typeof data.teams === 'number') setLiveTeams(data.teams);
@@ -43,16 +48,18 @@ export default function HackathonDetail({ onRegisterClick, isRegistered }) {
   };
 
   useEffect(() => {
-    fetchCounts();
-    const id = setInterval(fetchCounts, 30_000);
+    fetchCounts();                          // fetch immediately on mount
+    const id = setInterval(fetchCounts, 30_000); // then every 30 s
     return () => clearInterval(id);
   }, []);
 
+  // Re-fetch instantly when this user just registered (isRegistered flips true)
   const prevRegistered = useRef(false);
   useEffect(() => {
     if (isRegistered && !prevRegistered.current) fetchCounts();
     prevRegistered.current = isRegistered;
   }, [isRegistered]);
+  // ───────────────────────────────────────────────────────────────────────────
 
   const animatedTeams = useCountUp(liveTeams);
   const animatedParticipants = useCountUp(liveParticipants);
@@ -67,17 +74,17 @@ export default function HackathonDetail({ onRegisterClick, isRegistered }) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero */}
-      <div className="h-56 sm:h-80 bg-gradient-to-br from-[#003d82] to-[#0052a8] flex items-center justify-center">
+      <div className="h-80 bg-gradient-to-br from-[#003d82] to-[#0052a8] flex items-center justify-center">
         <div className="text-center text-white px-4">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold mb-3 sm:mb-4">HackStone 1.0</h1>
-          <p className="text-base sm:text-xl md:text-2xl text-gray-100">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4">HackStone 1.0</h1>
+          <p className="text-xl md:text-2xl text-gray-100">
             Innovate. Code. Transform the Future.
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 -mt-8 sm:-mt-16">
-        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 mb-6 sm:mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16">
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
 
           {/* Info Grid */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -104,8 +111,8 @@ export default function HackathonDetail({ onRegisterClick, isRegistered }) {
           </div>
 
           {/* Tabs */}
-          <div className="border-b mb-6 sm:mb-8">
-            <div className="flex overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 space-x-4 sm:space-x-8">
+          <div className="border-b mb-8">
+            <div className="flex space-x-8 overflow-x-auto">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -122,7 +129,7 @@ export default function HackathonDetail({ onRegisterClick, isRegistered }) {
           </div>
 
           {/* Tab Content */}
-          <div className="prose prose-sm sm:prose max-w-none">
+          <div className="prose max-w-none">
             {activeTab === 'overview' && <Overview />}
             {activeTab === 'problem' && <Problem />}
             {activeTab === 'rules' && <Rules />}
@@ -132,14 +139,14 @@ export default function HackathonDetail({ onRegisterClick, isRegistered }) {
 
         {/* Register CTA */}
         {!isRegistered && (
-          <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 mb-6 sm:mb-8 text-center">
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Ready to Join?</h3>
-            <p className="text-sm sm:text-base text-gray-600 mb-5 sm:mb-6">
+          <div className="bg-white rounded-xl shadow-lg p-8 mb-8 text-center">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Ready to Join?</h3>
+            <p className="text-gray-600 mb-6">
               Register your team now and be part of this exciting event!
             </p>
             <button
               onClick={onRegisterClick}
-              className="bg-[#003d82] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg hover:bg-[#002d62] transition-colors font-semibold text-base sm:text-lg w-full sm:w-auto"
+              className="bg-[#003d82] text-white px-8 py-4 rounded-lg hover:bg-[#002d62] transition-colors font-semibold text-lg"
             >
               Register Your Team
             </button>
@@ -150,9 +157,10 @@ export default function HackathonDetail({ onRegisterClick, isRegistered }) {
   );
 }
 
-/* ── Stat Card — fully responsive layout ── */
+/* ── Stat Card ── */
 function StatCard({ icon, value, label, color }) {
   return (
+<<<<<<< HEAD
     <div className={`bg-gradient-to-br ${color} rounded-xl p-3 sm:p-6 text-white shadow-md`}>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
         <div className="bg-white/20 rounded-full p-2 sm:p-3 flex-shrink-0 w-fit">
@@ -162,6 +170,13 @@ function StatCard({ icon, value, label, color }) {
           <div className="text-3xl sm:text-4xl font-bold tabular-nums leading-none">{value}</div>
           <div className="text-xs sm:text-sm text-white/80 mt-1 leading-tight break-words">{label}</div>
         </div>
+=======
+    <div className={`bg-gradient-to-br ${color} rounded-xl p-6 text-white flex items-center space-x-4 shadow-md`}>
+      <div className="bg-white/20 rounded-full p-3">{icon}</div>
+      <div>
+        <div className="text-4xl font-bold tabular-nums">{value}</div>
+        <div className="text-sm text-white/80 mt-1">{label}</div>
+>>>>>>> f80b4e1fc1d63f0e4173f054b79ea3a86a0e247b
       </div>
     </div>
   );
@@ -170,11 +185,11 @@ function StatCard({ icon, value, label, color }) {
 /* ── Info Item ── */
 function InfoItem({ icon, label, value }) {
   return (
-    <div className="flex items-start space-x-2 sm:space-x-3">
-      <div className="text-[#003d82] w-4 h-4 sm:w-6 sm:h-6 mt-0.5 sm:mt-1 flex-shrink-0">{icon}</div>
-      <div className="min-w-0">
-        <p className="text-xs sm:text-sm text-gray-500">{label}</p>
-        <p className="font-semibold text-gray-900 text-xs sm:text-base leading-tight">{value}</p>
+    <div className="flex items-start space-x-3">
+      <div className="text-[#003d82] w-6 h-6 mt-1">{icon}</div>
+      <div>
+        <p className="text-sm text-gray-500">{label}</p>
+        <p className="font-semibold text-gray-900">{value}</p>
       </div>
     </div>
   );
@@ -343,13 +358,18 @@ function Overview() {
 function Problem() {
   return (
     <>
-      <h3 className="text-xl sm:text-2xl font-bold mb-4">Problem Statement</h3>
-      <div className="bg-blue-50 border-l-4 border-[#003d82] p-4 sm:p-6">
+      <h3 className="text-2xl font-bold mb-4">Problem Statement</h3>
+      <div className="bg-blue-50 border-l-4 border-[#003d82] p-6">
         <div className="flex items-center space-x-2 mb-2">
+<<<<<<< HEAD
           <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-[#003d82] flex-shrink-0" />
           <p className="font-semibold text-sm sm:text-base">Will be released on March 1, 2026 at 6:30 PM</p>
+=======
+          <Clock className="w-5 h-5 text-[#003d82]" />
+          <p className="font-semibold">Will be released on March 1, 2026 at 9:00 AM</p>
+>>>>>>> f80b4e1fc1d63f0e4173f054b79ea3a86a0e247b
         </div>
-        <p className="text-sm sm:text-base text-gray-600">
+        <p className="text-gray-600">
           Problem statement will be revealed at the start of the hackathon.
         </p>
       </div>
@@ -430,12 +450,18 @@ function Timeline() {
           to   { opacity: 1; transform: translateX(0); }
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
         .tl-item { animation: tl-fade-in 0.4s ease both; }
 =======
         .tl-item {
           animation: tl-fade-in 0.4s ease both;
         }
 >>>>>>> origin/pragyan3
+=======
+        .tl-item {
+          animation: tl-fade-in 0.4s ease both;
+        }
+>>>>>>> f80b4e1fc1d63f0e4173f054b79ea3a86a0e247b
         .tl-item:nth-child(1) { animation-delay: 0.05s; }
         .tl-item:nth-child(2) { animation-delay: 0.12s; }
         .tl-item:nth-child(3) { animation-delay: 0.19s; }
