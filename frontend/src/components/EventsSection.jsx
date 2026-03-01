@@ -131,7 +131,7 @@ export default function EventsSection({ onEventClick, onRegisterClick }) {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onRegisterClick();
+                    onEventClick();
                   }}
                   className="register-btn w-full bg-[#003d82] text-white px-6 py-3 rounded-lg font-semibold"
                 >

@@ -85,8 +85,7 @@ export default function PostRegistration({ teamName }) {
             <h3 className="font-semibold text-gray-900 text-lg">What's Next?</h3>
             <ul className="space-y-2">
               {[
-                'Check your email for registration confirmation and event details',
-                'Join our Discord server for updates and communication',
+                'We will add every team lease to a WhatsApp group for further updates',
                 'Prepare your development environment and tools',
                 'Review the rules and guidelines in the event details',
               ].map((item) => (

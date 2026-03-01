@@ -383,10 +383,10 @@ function Timeline() {
       date: 'Mar 1, 2026',
       day: 'Day 1',
       title: 'Problem Statement Release',
-      desc: 'The official problem statement goes live at 9:00 AM. Teams receive their challenge and the clock starts ticking.',
+      desc: 'The official problem statement goes live at 6:30 PM. Teams receive their challenge and the clock starts ticking.',
       icon: '🚀',
       color: '#003d82',
-      badge: '9:00 AM',
+      badge: '6:30 PM',
     },
     {
       date: 'Mar 1–11, 2026',
@@ -398,13 +398,13 @@ function Timeline() {
       badge: '11 Days',
     },
     {
-      date: 'Mar 11, 2026',
+      date: 'Mar 12, 2026',
       day: 'Deadline',
       title: 'Final Submission Deadline',
       desc: 'All project submissions must be uploaded by 11:59 PM. Late entries will not be considered.',
       icon: '📦',
       color: '#d97706',
-      badge: '11:59 PM',
+      badge: '11:59 AM',
     },
     {
       date: 'Mar 12, 2026',
