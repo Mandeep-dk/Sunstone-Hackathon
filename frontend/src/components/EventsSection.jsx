@@ -120,20 +120,18 @@ export default function EventsSection({ onEventClick, onRegisterClick }) {
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Users className="w-5 h-5 mr-3 text-[#003d82]" />
-                    <span>Team Size: 3-5 members</span>
+                    <span>Team Size: 4-5 members</span>
                   </div>
                 </div>
 
                 <p className="text-gray-600 mb-6">
-                  Join us for an exciting 48-hour hackathon where you'll work with your team to solve
-                  real-world problems. Compete for amazing prizes and showcase your innovative solutions
-                  to industry experts.
+                  Join us for an exciting one-day hybrid hackathon on 14 March, where teams will tackle real-world problems with innovative ideas. The first round will be conducted online, allowing participants to submit and present their ideas remotely. Shortlisted teams will then compete in the on-campus final round, showcasing their solutions to industry experts and judges for a chance to win exciting prizes.
                 </p>
 
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onRegisterClick();
+                    onEventClick();
                   }}
                   className="register-btn w-full bg-[#003d82] text-white px-6 py-3 rounded-lg font-semibold"
                 >

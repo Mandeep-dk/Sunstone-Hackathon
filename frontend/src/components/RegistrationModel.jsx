@@ -65,7 +65,9 @@ export default function RegistrationModel({ isOpen, onClose, onSubmit }) {
 
   const [teamName, setTeamName] = useState('');
   const [leader, setLeader] = useState(emptyMember());
-  const [members, setMembers] = useState([emptyMember(), emptyMember()]);
+  // Min 4 total = leader + 3 others → members starts with 3
+  // Max 5 total = leader + 4 others → members capped at 4
+  const [members, setMembers] = useState([emptyMember(), emptyMember(), emptyMember()]);
 
   if (!isOpen) return null;
 
@@ -82,12 +84,14 @@ export default function RegistrationModel({ isOpen, onClose, onSubmit }) {
     setMembers((prev) => prev.map((m, idx) => (idx === i ? { ...m, [field]: val } : m)));
   };
 
+  // Max 4 extra members (5 total)
   const addMember = () => {
     if (members.length < 4) setMembers((p) => [...p, emptyMember()]);
   };
 
+  // Can only remove if above min of 3 extra (4 total)
   const removeMember = (i) => {
-    if (members.length > 2) setMembers((p) => p.filter((_, idx) => idx !== i));
+    if (members.length > 3) setMembers((p) => p.filter((_, idx) => idx !== i));
   };
 
   const handleSubmit = async (e) => {
@@ -136,7 +140,7 @@ export default function RegistrationModel({ isOpen, onClose, onSubmit }) {
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between z-10">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Register Your Team</h2>
-            <p className="text-xs text-gray-400 mt-0.5">Minimum 3 members · Maximum 5 members</p>
+            <p className="text-xs text-gray-400 mt-0.5">Minimum 4 members · Maximum 5 members</p>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
             <X className="w-6 h-6" />
@@ -176,13 +180,13 @@ export default function RegistrationModel({ isOpen, onClose, onSubmit }) {
                 label={`Member ${i + 2}`}
                 data={m}
                 onChange={(field, val) => updateMember(i, field, val)}
-                canRemove={members.length > 2}
+                canRemove={members.length > 3}
                 onRemove={() => removeMember(i)}
               />
             ))}
           </div>
 
-          {/* Add Member Button */}
+          {/* Add Member Button — visible only when below max of 4 extra (5 total) */}
           {members.length < 4 && (
             <button
               type="button"
@@ -197,8 +201,8 @@ export default function RegistrationModel({ isOpen, onClose, onSubmit }) {
           {/* Member count indicator */}
           <div className="flex items-center justify-between text-xs text-gray-400 px-1">
             <span>Total members: <strong className="text-gray-600">{1 + members.length}</strong></span>
-            <span className={1 + members.length >= 3 ? 'text-green-500 font-medium' : 'text-red-400 font-medium'}>
-              {1 + members.length >= 3 ? '✓ Minimum met' : '⚠ Need at least 3 members'}
+            <span className={1 + members.length >= 4 ? 'text-green-500 font-medium' : 'text-red-400 font-medium'}>
+              {1 + members.length >= 4 ? '✓ Minimum met' : '⚠ Need at least 4 members'}
             </span>
           </div>
 
