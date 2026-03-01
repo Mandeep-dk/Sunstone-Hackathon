@@ -160,7 +160,6 @@ export default function HackathonDetail({
 /* ── Stat Card ── */
 function StatCard({ icon, value, label, color }) {
   return (
-<<<<<<< HEAD
     <div className={`bg-gradient-to-br ${color} rounded-xl p-3 sm:p-6 text-white shadow-md`}>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
         <div className="bg-white/20 rounded-full p-2 sm:p-3 flex-shrink-0 w-fit">
@@ -170,13 +169,6 @@ function StatCard({ icon, value, label, color }) {
           <div className="text-3xl sm:text-4xl font-bold tabular-nums leading-none">{value}</div>
           <div className="text-xs sm:text-sm text-white/80 mt-1 leading-tight break-words">{label}</div>
         </div>
-=======
-    <div className={`bg-gradient-to-br ${color} rounded-xl p-6 text-white flex items-center space-x-4 shadow-md`}>
-      <div className="bg-white/20 rounded-full p-3">{icon}</div>
-      <div>
-        <div className="text-4xl font-bold tabular-nums">{value}</div>
-        <div className="text-sm text-white/80 mt-1">{label}</div>
->>>>>>> f80b4e1fc1d63f0e4173f054b79ea3a86a0e247b
       </div>
     </div>
   );
@@ -361,13 +353,8 @@ function Problem() {
       <h3 className="text-2xl font-bold mb-4">Problem Statement</h3>
       <div className="bg-blue-50 border-l-4 border-[#003d82] p-6">
         <div className="flex items-center space-x-2 mb-2">
-<<<<<<< HEAD
           <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-[#003d82] flex-shrink-0" />
           <p className="font-semibold text-sm sm:text-base">Will be released on March 1, 2026 at 6:30 PM</p>
-=======
-          <Clock className="w-5 h-5 text-[#003d82]" />
-          <p className="font-semibold">Will be released on March 1, 2026 at 9:00 AM</p>
->>>>>>> f80b4e1fc1d63f0e4173f054b79ea3a86a0e247b
         </div>
         <p className="text-gray-600">
           Problem statement will be revealed at the start of the hackathon.
