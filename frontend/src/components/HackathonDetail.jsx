@@ -259,7 +259,7 @@ function Overview() {
         <h3 className="text-2xl font-bold text-gray-900 mb-3">About HackStone 1.0</h3>
         <p className="text-gray-600 leading-relaxed">
           HackStone 1.0 is Sunstone's first-ever inter-college hackathon — a platform where college
-          students build, innovate, and compete across three exciting tracks. Over 11 days online,
+          students build, innovate, and compete across three exciting tracks. Over 7 days online,
           teams tackle a real-world problem statement, then the best teams face off in a Grand Finale
           on campus. Whether you're a coder, a maker, or both — there's a track for you.
         </p>

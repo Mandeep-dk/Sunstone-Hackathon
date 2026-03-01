@@ -36,7 +36,7 @@ export default function Footer() {
                 </span>
               </a>
 
-              <a href="tel:+919876543210" className="group flex items-center justify-center md:justify-end gap-3 text-gray-300 hover:text-white transition-colors duration-300">
+              <a href="tel:+918822072775" className="group flex items-center justify-center md:justify-end gap-3 text-gray-300 hover:text-white transition-colors duration-300">
                 <span className="text-sm tracking-wide text-black">+91 88220 72775</span>
                 <span className="w-8 h-8 rounded-full border border-[#c9a84c]/30 flex items-center justify-center group-hover:border-[#c9a84c] transition-colors duration-300">
                   <Phone className="w-3.5 h-3.5 text-[#003d82]" />
