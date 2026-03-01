@@ -388,8 +388,8 @@ function Timeline() {
       badge: '6:30 PM',
     },
     {
-      date: 'Mar 1–11, 2026',
-      day: 'Days 1–11',
+      date: 'Mar 1–7, 2026',
+      day: 'Days 1–7',
       title: 'Hacking Period',
       desc: 'Build your solution, iterate fast, and get mentorship. Online collaboration allowed. Use any tech stack.',
       icon: '💻',
@@ -397,13 +397,13 @@ function Timeline() {
       badge: '11 Days',
     },
     {
-      date: 'Mar 12, 2026',
+      date: 'Mar 7, 2026',
       day: 'Deadline',
       title: 'Final Submission Deadline',
       desc: 'All project submissions must be uploaded by 11:59 PM. Late entries will not be considered.',
       icon: '📦',
       color: '#d97706',
-      badge: '11:59 AM',
+      badge: '11:59 PM',
     },
     {
       date: 'Mar 12, 2026',
